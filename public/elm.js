@@ -7474,13 +7474,14 @@ Elm.View.make = function (_elm) {
    var _op = {};
    var view = F2(function (_p0,s) {
       var _p1 = _p0;
-      var _p3 = _p1._0;
-      var _p2 = _p1._1;
+      var _p4 = _p1._0;
+      var _p3 = _p1._1;
       var stars = $Graphics$Collage.toForm(A3($Graphics$Element.image,500,500,A2($Basics._op["++"],$Root.root,"stars.png")));
       var position = {ctor: "_Tuple2",_0: s.x,_1: s.y};
       var lander = A2($Graphics$Collage.rotate,$Basics.degrees(s.a),A2($Graphics$Collage.move,position,$Graphics$Collage.toForm($DrawLander.drawLander(s))));
-      var h = $Basics.toFloat(622);
-      var w = $Basics.toFloat(_p3);
+      var _p2 = {ctor: "_Tuple2",_0: $Basics.toFloat(_p4),_1: $Basics.toFloat(_p3)};
+      var w = _p2._0;
+      var h = _p2._1;
       var landerKeys = A2($Graphics$Collage.move,
       {ctor: "_Tuple2",_0: 100 - w / 2,_1: h / 2 - 100},
       $Graphics$Collage.toForm(A3($Graphics$Element.image,276,276,A2($Basics._op["++"],$Root.root,"thruster_keys.png"))));
@@ -7491,13 +7492,13 @@ Elm.View.make = function (_elm) {
          function (u) {
             return A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: 0,_1: u * -495},tile$);
          },
-         A2($List.map,function (n) {    return $Basics.toFloat(n);},_U.range(0,(_p2 / 500 | 0) + 1)));
+         A2($List.map,function (n) {    return $Basics.toFloat(n);},_U.range(0,(_p3 / 500 | 0) + 1)));
       };
       var tiles = A3($List.foldr,
       $List.append,
       _U.list([]),
-      A2($List.map,tile,A2($List.map,function (n) {    return $Basics.toFloat(n);},_U.range(0,(_p3 / 500 | 0) + 1))));
-      return A3($Graphics$Collage.collage,_p3,_p2,A2($List.append,tiles,_U.list([lander,landerKeys])));
+      A2($List.map,tile,A2($List.map,function (n) {    return $Basics.toFloat(n);},_U.range(0,(_p4 / 500 | 0) + 1))));
+      return A3($Graphics$Collage.collage,_p4,_p3,A2($List.append,tiles,_U.list([lander,landerKeys])));
    });
    return _elm.View.values = {_op: _op,view: view};
 };
