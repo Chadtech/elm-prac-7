@@ -12,7 +12,8 @@ import Thrusters exposing (deltaY, deltaX, deltaAngular)
 import View exposing (view)
 import Types exposing (..)
 import KeyCodes
-
+import Task
+import Effects exposing (..)
 
 -- The landers name is Reasey
 reasey : Ship
@@ -92,10 +93,10 @@ physics dt reasey =
 update : (Float, Set.Set Int) -> Ship -> Ship
 update (dt, keys) reasey =
   reasey
-  |> setThrusters keys
-  |> gravity dt
-  |> thrust
-  |> physics dt
+    |> setThrusters keys
+    |> gravity dt
+    |> thrust
+    |> physics dt
 
 
 main : Signal Element

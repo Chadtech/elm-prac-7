@@ -13,7 +13,9 @@ view : (Int, Int) -> Ship -> Element
 view (w', h') s =
   let 
 
-    (w, h)   = (toFloat w', toFloat h')
+    --(w, h)   = (toFloat w', toFloat 800)
+    w = toFloat w'
+    h = toFloat 622
     position = (s.x, s.y)
 
 
