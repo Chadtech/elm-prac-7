@@ -7340,7 +7340,7 @@ Elm.DrawLander.make = function (_elm) {
    $Types = Elm.Types.make(_elm);
    var _op = {};
    var drawLander = function (s) {
-      var lander = _U.list([$Graphics$Collage.toForm(A3($Graphics$Element.image,138,138,A2($Basics._op["++"],$Root.root,"lander.png")))]);
+      var lander = _U.list([$Graphics$Collage.toForm(A3($Graphics$Element.image,47,48,A2($Basics._op["++"],$Root.root,"lander.png")))]);
       var t = s.thrusters;
       var mainThruster = _U.eq(t.main,1) ? _U.list([A2($Graphics$Collage.move,
       {ctor: "_Tuple2",_0: 0,_1: -32},
@@ -7375,10 +7375,7 @@ Elm.DrawLander.make = function (_elm) {
       A2($Graphics$Collage.rotate,
       $Basics.degrees(180),
       $Graphics$Collage.toForm(A3($Graphics$Element.image,2,9,A2($Basics._op["++"],$Root.root,"blast_yaw.png")))))]) : _U.list([]);
-      return A3($Graphics$Collage.collage,
-      138,
-      138,
-      A3($List.foldr,$List.append,_U.list([]),_U.list([rightSide,leftSide,rightBack,leftBack,rightFront,leftFront,mainThruster,lander])));
+      return A3($Graphics$Collage.collage,138,138,A3($List.foldr,$List.append,_U.list([]),_U.list([lander])));
    };
    return _elm.DrawLander.values = {_op: _op,drawLander: drawLander};
 };
@@ -7549,7 +7546,7 @@ Elm.Main.make = function (_elm) {
                   ,rightSide: A2(keyPressed,$KeyCodes.k,keys)
                   ,rightBack: A2(keyPressed,$KeyCodes.u,keys)}});
    });
-   var update = F2(function (_p0,reasey) {    var _p1 = _p0;var _p2 = _p1._0;return A2(physics,_p2,thrust(A2(gravity,_p2,A2(setThrusters,_p1._1,reasey))));});
+   var update = F2(function (_p0,reasey) {    var _p1 = _p0;return A2(physics,_p1._0,thrust(A2(setThrusters,_p1._1,reasey)));});
    var reasey = {x: 0,y: 0,a: 0,vx: -0.4,vy: 3,va: 0.5,thrusters: {leftFront: 0,leftSide: 0,leftBack: 0,main: 0,rightFront: 0,rightSide: 0,rightBack: 0}};
    var main = A3($Signal.map2,$View.view,$Window.dimensions,A3($Signal.foldp,update,reasey,input));
    return _elm.Main.values = {_op: _op

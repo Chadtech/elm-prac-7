@@ -19,22 +19,22 @@ view (w', h') s =
 
     landerKeys = 
       move (100 - w/2, h/2 - 100)
-      <| toForm
-      <| image 276 276 
-      <| root ++ "thruster_keys.png"
+      <|  toForm
+      <|  image 276 276 
+      <|  root ++ "thruster_keys.png"
 
 
     lander =
       rotate (degrees s.a)
-      <| move position
-      <| toForm 
-      <| drawLander s
+      <|  move position
+      <|  toForm 
+      <|  drawLander s
 
 
     stars = 
       toForm 
-      <| image 500 500 
-      <| root ++ "stars.png"
+      <|  image 500 500 
+      <|  root ++ "stars.png"
 
 
     -- Make a column of the stars tile,
@@ -46,8 +46,8 @@ view (w', h') s =
         tile' = move pos stars
       in 
         List.map (\u -> (move (0, u * -495) tile'))
-        <| List.map (\n -> toFloat n) 
-        <| [ 0 .. (h' // 500) + 1 ]
+        <|  List.map (\n -> toFloat n) 
+        <|  [ 0 .. (h' // 500) + 1 ]
 
     -- Make several columns and rows
     -- of the star tile, positioned

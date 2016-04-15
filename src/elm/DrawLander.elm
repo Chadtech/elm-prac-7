@@ -14,7 +14,7 @@ drawLander s =
 
       lander = 
         [ toForm 
-          <| image 138 138 
+          <| image 47 48 
           <| root ++ "lander.png" 
         ]
 
@@ -90,14 +90,14 @@ drawLander s =
     in
       collage 138 138
       <| List.foldr append []
-      <|  [ rightSide
-          , leftSide
-          , rightBack
-          , leftBack
-          , rightFront
-          , leftFront
-          , mainThruster
-          , lander
+      <|  [ --rightSide
+          --, leftSide
+          --, rightBack
+          --, leftBack
+          --, rightFront
+          --, leftFront
+          --, mainThruster
+          lander
           ]
 
 

@@ -94,7 +94,7 @@ update : (Float, Set.Set Int) -> Ship -> Ship
 update (dt, keys) reasey =
   reasey
     |> setThrusters keys
-    |> gravity dt
+    --|> gravity dt
     |> thrust
     |> physics dt
 
