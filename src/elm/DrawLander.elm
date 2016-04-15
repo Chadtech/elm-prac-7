@@ -29,7 +29,7 @@ drawLander s =
 
       leftFront =
         if t.leftFront == 1 then
-          [ move (-23, 11) 
+          [ move (-19, 9) 
             <| toForm  
             <| image 2 9 
             <| root ++ "blast_yaw.png"
@@ -38,7 +38,7 @@ drawLander s =
 
       leftBack =
         if t.leftBack == 1 then
-          [ move (-23, -9) 
+          [ move (-19, -9) 
             <| scale -1
             <| toForm  
             <| image 2 9 
@@ -48,7 +48,7 @@ drawLander s =
 
       leftSide = 
         if t.leftSide == 1 then
-          [ move (30, 1)
+          [ move (25, -1)
             <| rotate (degrees 180)
             <| toForm
             <| image 8 3 
@@ -58,7 +58,7 @@ drawLander s =
 
       rightSide =
         if t.rightSide == 1 then
-          [ move (-30, 1)
+          [ move (-25, -1)
             <| rotate (degrees 0)
             <| toForm
             <| image 8 3 
@@ -68,7 +68,7 @@ drawLander s =
 
       rightFront =
         if t.rightFront == 1 then
-          [ move (23, 11) 
+          [ move (19, 9) 
             <| rotate (degrees 180) 
             <| scale -1  
             <| toForm  
@@ -79,7 +79,7 @@ drawLander s =
 
       rightBack =
         if t.rightBack == 1 then
-          [ move (23, -9)
+          [ move (19, -9)
             <| rotate (degrees 180)
             <| toForm
             <| image 2 9 
@@ -90,14 +90,14 @@ drawLander s =
     in
       collage 138 138
       <| List.foldr append []
-      <|  [ --rightSide
-          --, leftSide
-          --, rightBack
-          --, leftBack
-          --, rightFront
-          --, leftFront
-          --, mainThruster
-          lander
+      <|  [ rightSide
+          , leftSide
+          , rightBack
+          , leftBack
+          , rightFront
+          , leftFront
+          , mainThruster
+          , lander
           ]
 
 

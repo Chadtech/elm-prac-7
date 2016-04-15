@@ -7346,36 +7346,39 @@ Elm.DrawLander.make = function (_elm) {
       {ctor: "_Tuple2",_0: 0,_1: -32},
       $Graphics$Collage.toForm(A3($Graphics$Element.image,12,33,A2($Basics._op["++"],$Root.root,"blast_main.png"))))]) : _U.list([]);
       var leftFront = _U.eq(t.leftFront,1) ? _U.list([A2($Graphics$Collage.move,
-      {ctor: "_Tuple2",_0: -23,_1: 11},
+      {ctor: "_Tuple2",_0: -19,_1: 9},
       $Graphics$Collage.toForm(A3($Graphics$Element.image,2,9,A2($Basics._op["++"],$Root.root,"blast_yaw.png"))))]) : _U.list([]);
       var leftBack = _U.eq(t.leftBack,1) ? _U.list([A2($Graphics$Collage.move,
-      {ctor: "_Tuple2",_0: -23,_1: -9},
+      {ctor: "_Tuple2",_0: -19,_1: -9},
       A2($Graphics$Collage.scale,
       -1,
       $Graphics$Collage.toForm(A3($Graphics$Element.image,2,9,A2($Basics._op["++"],$Root.root,"blast_yaw_f.png")))))]) : _U.list([]);
       var leftSide = _U.eq(t.leftSide,1) ? _U.list([A2($Graphics$Collage.move,
-      {ctor: "_Tuple2",_0: 30,_1: 1},
+      {ctor: "_Tuple2",_0: 25,_1: -1},
       A2($Graphics$Collage.rotate,
       $Basics.degrees(180),
       $Graphics$Collage.toForm(A3($Graphics$Element.image,8,3,A2($Basics._op["++"],$Root.root,"blast_strafe.png")))))]) : _U.list([]);
       var rightSide = _U.eq(t.rightSide,1) ? _U.list([A2($Graphics$Collage.move,
-      {ctor: "_Tuple2",_0: -30,_1: 1},
+      {ctor: "_Tuple2",_0: -25,_1: -1},
       A2($Graphics$Collage.rotate,
       $Basics.degrees(0),
       $Graphics$Collage.toForm(A3($Graphics$Element.image,8,3,A2($Basics._op["++"],$Root.root,"blast_strafe.png")))))]) : _U.list([]);
       var rightFront = _U.eq(t.rightFront,1) ? _U.list([A2($Graphics$Collage.move,
-      {ctor: "_Tuple2",_0: 23,_1: 11},
+      {ctor: "_Tuple2",_0: 19,_1: 9},
       A2($Graphics$Collage.rotate,
       $Basics.degrees(180),
       A2($Graphics$Collage.scale,
       -1,
       $Graphics$Collage.toForm(A3($Graphics$Element.image,2,9,A2($Basics._op["++"],$Root.root,"blast_yaw_f.png"))))))]) : _U.list([]);
       var rightBack = _U.eq(t.rightBack,1) ? _U.list([A2($Graphics$Collage.move,
-      {ctor: "_Tuple2",_0: 23,_1: -9},
+      {ctor: "_Tuple2",_0: 19,_1: -9},
       A2($Graphics$Collage.rotate,
       $Basics.degrees(180),
       $Graphics$Collage.toForm(A3($Graphics$Element.image,2,9,A2($Basics._op["++"],$Root.root,"blast_yaw.png")))))]) : _U.list([]);
-      return A3($Graphics$Collage.collage,138,138,A3($List.foldr,$List.append,_U.list([]),_U.list([lander])));
+      return A3($Graphics$Collage.collage,
+      138,
+      138,
+      A3($List.foldr,$List.append,_U.list([]),_U.list([rightSide,leftSide,rightBack,leftBack,rightFront,leftFront,mainThruster,lander])));
    };
    return _elm.DrawLander.values = {_op: _op,drawLander: drawLander};
 };
