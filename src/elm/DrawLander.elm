@@ -89,16 +89,16 @@ drawLander s =
 
     in
       collage 138 138
-      <| List.foldr append []
-      <|  [ rightSide
-          , leftSide
-          , rightBack
-          , leftBack
-          , rightFront
-          , leftFront
-          , mainThruster
-          , lander
-          ]
+      <|List.foldr append []
+        [ rightSide
+        , leftSide
+        , rightBack
+        , leftBack
+        , rightFront
+        , leftFront
+        , mainThruster
+        , lander
+        ]
 
 
 

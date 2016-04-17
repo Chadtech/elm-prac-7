@@ -14,6 +14,7 @@ import Types exposing (..)
 import KeyCodes
 import Task
 import Effects exposing (..)
+import Set exposing (Set)
 
 -- The landers name is Reasey
 reasey : Ship
@@ -21,9 +22,12 @@ reasey =
   { x            = 0
   , y            = 0
   , a            = 0
-  , vx           = -0.4
-  , vy           = 3
-  , va           = 0.5
+  , vx           = 0
+  , vy           = 0
+  , va           = 0
+  --, vx           = -0.4
+  --, vy           = 3
+  --, va           = 0.5
   , thrusters    =
     { leftFront  = 0
     , leftSide   = 0
@@ -36,7 +40,7 @@ reasey =
   }
 
 
-keyPressed : Int -> Set.Set Int -> Int
+keyPressed : Int -> Set Int -> Int
 keyPressed key keys =
   if Set.member key keys then
     1
@@ -44,7 +48,7 @@ keyPressed key keys =
     0
 
 
-setThrusters : Set.Set Int -> Ship -> Ship
+setThrusters : Set Int -> Ship -> Ship
 setThrusters keys s =
   -- Buttons correspond to direction of thrust 
   -- not thruster position on craft
@@ -63,16 +67,11 @@ setThrusters keys s =
 
 thrust : Ship -> Ship
 thrust reasey =
-  let 
-    dva = deltaAngular reasey
-    dvy = deltaY       reasey
-    dvx = deltaX       reasey
-  in
-    { reasey |
-      vy = reasey.vy + 0.5 * dvy
-    , vx = reasey.vx + 0.5 * dvx
-    , va = reasey.va + 0.5 * dva
-    }
+  { reasey |
+    vy = reasey.vy + 0.5 * (deltaY       reasey)
+  , vx = reasey.vx + 0.5 * (deltaX       reasey)
+  , va = reasey.va + 0.5 * (deltaAngular reasey)
+  }
 
 gravity : Float -> Ship -> Ship
 gravity dt reasey =
@@ -90,13 +89,13 @@ physics dt reasey =
   }
 
 
-update : (Float, Set.Set Int) -> Ship -> Ship
+update : (Float, Set Int) -> Ship -> Ship
 update (dt, keys) reasey =
   reasey
-    |> setThrusters keys
+    |>setThrusters keys
     --|> gravity dt
-    |> thrust
-    |> physics dt
+    |>thrust
+    |>physics dt
 
 
 main : Signal Element
@@ -104,7 +103,7 @@ main =
   Signal.map2 view Window.dimensions (Signal.foldp update reasey input)
 
 
-input : Signal (Float, Set.Set Int)
+input : Signal (Float, Set Int)
 input =
   let 
     delta = Signal.map (\t -> t/40) (fps 30)

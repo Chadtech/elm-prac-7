@@ -7418,41 +7418,43 @@ Elm.Thrusters.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm),
    $Types = Elm.Types.make(_elm);
    var _op = {};
-   var deltaAngular = function (s) {
+   var weakPower = 0.2;
+   var mainPower = weakPower * 15;
+   var deltaY = function (s) {
+      var sin$ = $Basics.sin($Basics.degrees(s.a));
+      var cos$ = $Basics.cos($Basics.degrees(s.a));
       var t = s.thrusters;
-      var lb = -0.1 * $Basics.toFloat(t.leftBack);
-      var lf = 0.1 * $Basics.toFloat(t.leftFront);
-      var rb = 0.1 * $Basics.toFloat(t.rightBack);
-      var rf = -0.1 * $Basics.toFloat(t.rightFront);
-      return lb + lf + rb + rf;
+      var main = mainPower * cos$ * $Basics.toFloat(t.main);
+      var lb = weakPower * cos$ * $Basics.toFloat(t.leftBack);
+      var lf = (0 - weakPower) * cos$ * $Basics.toFloat(t.leftFront);
+      var rb = weakPower * cos$ * $Basics.toFloat(t.rightBack);
+      var rf = (0 - weakPower) * cos$ * $Basics.toFloat(t.rightFront);
+      var ls = (0 - weakPower) * sin$ * $Basics.toFloat(t.leftSide);
+      var rs = weakPower * sin$ * $Basics.toFloat(t.rightSide);
+      return ls + lb + lf + main + rf + rb + rs;
    };
    var deltaX = function (s) {
       var sin$ = $Basics.sin($Basics.degrees(s.a));
       var cos$ = $Basics.cos($Basics.degrees(s.a));
       var t = s.thrusters;
-      var main = -2.5 * sin$ * $Basics.toFloat(t.main);
-      var lb = -0.1 * sin$ * $Basics.toFloat(t.leftBack);
-      var lf = 0.1 * sin$ * $Basics.toFloat(t.leftFront);
-      var rb = -0.1 * sin$ * $Basics.toFloat(t.rightBack);
-      var rf = 0.1 * sin$ * $Basics.toFloat(t.rightFront);
-      var ls = -0.1 * cos$ * $Basics.toFloat(t.leftSide);
-      var rs = 0.1 * cos$ * $Basics.toFloat(t.rightSide);
+      var main = (0 - mainPower) * sin$ * $Basics.toFloat(t.main);
+      var lb = (0 - weakPower) * sin$ * $Basics.toFloat(t.leftBack);
+      var lf = weakPower * sin$ * $Basics.toFloat(t.leftFront);
+      var rb = (0 - weakPower) * sin$ * $Basics.toFloat(t.rightBack);
+      var rf = weakPower * sin$ * $Basics.toFloat(t.rightFront);
+      var ls = (0 - weakPower) * cos$ * $Basics.toFloat(t.leftSide);
+      var rs = weakPower * cos$ * $Basics.toFloat(t.rightSide);
       return ls + lb + lf + main + rf + rb + rs;
    };
-   var deltaY = function (s) {
-      var sin$ = $Basics.sin($Basics.degrees(s.a));
-      var cos$ = $Basics.cos($Basics.degrees(s.a));
+   var deltaAngular = function (s) {
       var t = s.thrusters;
-      var main = 2.5 * cos$ * $Basics.toFloat(t.main);
-      var lb = 0.1 * cos$ * $Basics.toFloat(t.leftBack);
-      var lf = -0.1 * cos$ * $Basics.toFloat(t.leftFront);
-      var rb = 0.1 * cos$ * $Basics.toFloat(t.rightBack);
-      var rf = -0.1 * cos$ * $Basics.toFloat(t.rightFront);
-      var ls = -0.1 * sin$ * $Basics.toFloat(t.leftSide);
-      var rs = 0.1 * sin$ * $Basics.toFloat(t.rightSide);
-      return ls + lb + lf + main + rf + rb + rs;
+      var lb = (0 - weakPower) * 0.8 * $Basics.toFloat(t.leftBack);
+      var lf = weakPower * 0.8 * $Basics.toFloat(t.leftFront);
+      var rb = weakPower * 0.8 * $Basics.toFloat(t.rightBack);
+      var rf = (0 - weakPower) * 0.8 * $Basics.toFloat(t.rightFront);
+      return lb + lf + rb + rf;
    };
-   return _elm.Thrusters.values = {_op: _op,deltaY: deltaY,deltaX: deltaX,deltaAngular: deltaAngular};
+   return _elm.Thrusters.values = {_op: _op,weakPower: weakPower,mainPower: mainPower,deltaY: deltaY,deltaX: deltaX,deltaAngular: deltaAngular};
 };
 Elm.View = Elm.View || {};
 Elm.View.make = function (_elm) {
@@ -7472,35 +7474,26 @@ Elm.View.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm),
    $Types = Elm.Types.make(_elm);
    var _op = {};
-   var view = F2(function (_p0,s) {
-      var _p1 = _p0;
-      var _p4 = _p1._0;
-      var _p3 = _p1._1;
-      var stars = $Graphics$Collage.toForm(A3($Graphics$Element.image,500,500,A2($Basics._op["++"],$Root.root,"stars.png")));
-      var position = {ctor: "_Tuple2",_0: s.x,_1: s.y};
-      var lander = A2($Graphics$Collage.rotate,$Basics.degrees(s.a),A2($Graphics$Collage.move,position,$Graphics$Collage.toForm($DrawLander.drawLander(s))));
-      var _p2 = {ctor: "_Tuple2",_0: $Basics.toFloat(_p4),_1: $Basics.toFloat(_p3)};
-      var w = _p2._0;
-      var h = _p2._1;
-      var landerKeys = A2($Graphics$Collage.move,
-      {ctor: "_Tuple2",_0: 100 - w / 2,_1: h / 2 - 100},
-      $Graphics$Collage.toForm(A3($Graphics$Element.image,276,276,A2($Basics._op["++"],$Root.root,"thruster_keys.png"))));
-      var tile = function (t) {
-         var pos = {ctor: "_Tuple2",_0: 500 * t - (w - 500) / 2,_1: h - 500};
-         var tile$ = A2($Graphics$Collage.move,pos,stars);
-         return A2($List.map,
-         function (u) {
-            return A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: 0,_1: u * -495},tile$);
-         },
-         A2($List.map,function (n) {    return $Basics.toFloat(n);},_U.range(0,(_p3 / 500 | 0) + 1)));
-      };
-      var tiles = A3($List.foldr,
-      $List.append,
-      _U.list([]),
-      A2($List.map,tile,A2($List.map,function (n) {    return $Basics.toFloat(n);},_U.range(0,(_p4 / 500 | 0) + 1))));
-      return A3($Graphics$Collage.collage,_p4,_p3,A2($List.append,tiles,_U.list([lander,landerKeys])));
+   var reposition = F3(function (_p1,_p0,world) {
+      var _p2 = _p1;
+      var _p3 = _p0;
+      return A3($Graphics$Collage.collage,_p3._0,_p3._1,_U.list([A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: 0 - _p2._0,_1: 0 - _p2._1},world)]));
    });
-   return _elm.View.values = {_op: _op,view: view};
+   var setUp = F2(function (_p4,s) {
+      var _p5 = _p4;
+      var stars = $Graphics$Collage.toForm(A3($Graphics$Element.image,500,500,A2($Basics._op["++"],$Root.root,"measure.png")));
+      var lander = A2($Graphics$Collage.rotate,
+      $Basics.degrees(s.a),
+      A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: s.x,_1: s.y},$Graphics$Collage.toForm($DrawLander.drawLander(s))));
+      return $Graphics$Collage.toForm(A3($Graphics$Collage.collage,_p5._0,_p5._1,_U.list([stars,lander])));
+   });
+   var view = F2(function (_p6,s) {
+      var _p7 = _p6;
+      var _p9 = _p7._0;
+      var _p8 = _p7._1;
+      return A3(reposition,{ctor: "_Tuple2",_0: s.x,_1: s.y},{ctor: "_Tuple2",_0: _p9,_1: _p8},A2(setUp,{ctor: "_Tuple2",_0: _p9,_1: _p8},s));
+   });
+   return _elm.View.values = {_op: _op,setUp: setUp,reposition: reposition,view: view};
 };
 Elm.Main = Elm.Main || {};
 Elm.Main.make = function (_elm) {
@@ -7533,10 +7526,8 @@ Elm.Main.make = function (_elm) {
    });
    var gravity = F2(function (dt,reasey) {    return _U.update(reasey,{vy: reasey.vy - dt / 50,vx: reasey.vx - dt / 94});});
    var thrust = function (reasey) {
-      var dvx = $Thrusters.deltaX(reasey);
-      var dvy = $Thrusters.deltaY(reasey);
-      var dva = $Thrusters.deltaAngular(reasey);
-      return _U.update(reasey,{vy: reasey.vy + 0.5 * dvy,vx: reasey.vx + 0.5 * dvx,va: reasey.va + 0.5 * dva});
+      return _U.update(reasey,
+      {vy: reasey.vy + 0.5 * $Thrusters.deltaY(reasey),vx: reasey.vx + 0.5 * $Thrusters.deltaX(reasey),va: reasey.va + 0.5 * $Thrusters.deltaAngular(reasey)});
    };
    var keyPressed = F2(function (key,keys) {    return A2($Set.member,key,keys) ? 1 : 0;});
    var setThrusters = F2(function (keys,s) {
@@ -7550,7 +7541,7 @@ Elm.Main.make = function (_elm) {
                   ,rightBack: A2(keyPressed,$KeyCodes.u,keys)}});
    });
    var update = F2(function (_p0,reasey) {    var _p1 = _p0;return A2(physics,_p1._0,thrust(A2(setThrusters,_p1._1,reasey)));});
-   var reasey = {x: 0,y: 0,a: 0,vx: -0.4,vy: 3,va: 0.5,thrusters: {leftFront: 0,leftSide: 0,leftBack: 0,main: 0,rightFront: 0,rightSide: 0,rightBack: 0}};
+   var reasey = {x: 0,y: 0,a: 0,vx: 0,vy: 0,va: 0,thrusters: {leftFront: 0,leftSide: 0,leftBack: 0,main: 0,rightFront: 0,rightSide: 0,rightBack: 0}};
    var main = A3($Signal.map2,$View.view,$Window.dimensions,A3($Signal.foldp,update,reasey,input));
    return _elm.Main.values = {_op: _op
                              ,reasey: reasey
