@@ -7303,7 +7303,7 @@ Elm.Root.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var root = "./";
+   var root = "https://raw.githubusercontent.com/Chadtech/elm-prac-7/master/public/";
    return _elm.Root.values = {_op: _op,root: root};
 };
 Elm.Types = Elm.Types || {};
