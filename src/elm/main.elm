@@ -5,7 +5,7 @@ import Keyboard
 import Time exposing (..)
 import Window
 import Set
-import Debug
+import Debug exposing (log)
 import List exposing (..)
 import Random
 import Thrusters exposing (deltaY, deltaX, deltaAngular)
@@ -21,13 +21,10 @@ reasey : Ship
 reasey = 
   { x            = 0
   , y            = 0
-  , a            = 0
+  , a            = 15
   , vx           = 0
   , vy           = 0
-  , va           = 0
-  --, vx           = -0.4
-  --, vy           = 3
-  --, va           = 0.5
+  , va           = -0.1
   , thrusters    =
     { leftFront  = 0
     , leftSide   = 0
@@ -52,16 +49,16 @@ setThrusters : Set Int -> Ship -> Ship
 setThrusters keys s =
   -- Buttons correspond to direction of thrust 
   -- not thruster position on craft
-  { s |
-    thrusters = 
-      { leftFront  = keyPressed KeyCodes.c     keys
-      , leftSide   = keyPressed KeyCodes.s     keys
-      , leftBack   = keyPressed KeyCodes.e     keys
-      , main       = keyPressed KeyCodes.space keys
-      , rightFront = keyPressed KeyCodes.n     keys
-      , rightSide  = keyPressed KeyCodes.k     keys
-      , rightBack  = keyPressed KeyCodes.u     keys
-      }
+  { s
+  | thrusters = 
+    { leftFront  = keyPressed KeyCodes.c     keys
+    , leftSide   = keyPressed KeyCodes.s     keys
+    , leftBack   = keyPressed KeyCodes.e     keys
+    , main       = keyPressed KeyCodes.space keys
+    , rightFront = keyPressed KeyCodes.n     keys
+    , rightSide  = keyPressed KeyCodes.k     keys
+    , rightBack  = keyPressed KeyCodes.u     keys
+    }
   }
 
 
@@ -80,13 +77,56 @@ gravity dt reasey =
   , vx = reasey.vx - dt/94
   }
 
+floatModulo: Float -> Int -> Float
+floatModulo n m =
+  let
+    n' = 
+      round n
+
+    modulod =
+      n' % m
+  in
+    (-) (toFloat modulod)
+    <|  (toFloat n') - n
+
+
 physics : Float -> Ship -> Ship
 physics dt reasey =
-  { reasey |
-    y = reasey.y + dt * reasey.vy
-  , x = reasey.x + dt * reasey.vx
-  , a = reasey.a + dt * reasey.va
-  }
+  let 
+    y' = 
+      let 
+        --yeeee = log "speee" reasey.vy
+        y'' = 
+          reasey.y + dt * reasey.vy
+      in    
+        --floatModulo y''  250
+        if y'' > 250 then
+          y'' - 500
+        else
+          if y'' < -250 then
+            y'' + 500
+          else
+            y''
+
+    x' = 
+      let
+        x'' = 
+          reasey.x + dt * reasey.vx
+      in
+        if x'' > 250 then
+          x'' - 500
+        else
+          if x'' < -250 then
+            x'' + 500
+          else
+            x''
+
+  in
+    { reasey |
+      y = y'
+    , x = x'
+    , a = reasey.a + dt * reasey.va
+    }
 
 
 update : (Float, Set Int) -> Ship -> Ship
@@ -106,7 +146,7 @@ main =
 input : Signal (Float, Set Int)
 input =
   let 
-    delta = Signal.map (\t -> t/40) (fps 30)
+    delta = Signal.map (\t -> t/120) (fps 30)
   in
     Signal.sampleOn delta (Signal.map2 (,) delta Keyboard.keysDown)
 

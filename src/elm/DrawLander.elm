@@ -15,7 +15,7 @@ drawLander s =
       lander = 
         [ toForm 
           <| image 47 48 
-          <| root ++ "lander.png" 
+          <| root ++ "darkened-lander.png" 
         ]
 
       mainThruster = 

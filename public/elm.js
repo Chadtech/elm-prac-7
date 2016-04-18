@@ -7340,7 +7340,7 @@ Elm.DrawLander.make = function (_elm) {
    $Types = Elm.Types.make(_elm);
    var _op = {};
    var drawLander = function (s) {
-      var lander = _U.list([$Graphics$Collage.toForm(A3($Graphics$Element.image,47,48,A2($Basics._op["++"],$Root.root,"lander.png")))]);
+      var lander = _U.list([$Graphics$Collage.toForm(A3($Graphics$Element.image,47,48,A2($Basics._op["++"],$Root.root,"darkened-lander.png")))]);
       var t = s.thrusters;
       var mainThruster = _U.eq(t.main,1) ? _U.list([A2($Graphics$Collage.move,
       {ctor: "_Tuple2",_0: 0,_1: -32},
@@ -7463,6 +7463,7 @@ Elm.View.make = function (_elm) {
    if (_elm.View.values) return _elm.View.values;
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
+   $Color = Elm.Color.make(_elm),
    $Debug = Elm.Debug.make(_elm),
    $DrawLander = Elm.DrawLander.make(_elm),
    $Graphics$Collage = Elm.Graphics.Collage.make(_elm),
@@ -7474,26 +7475,69 @@ Elm.View.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm),
    $Types = Elm.Types.make(_elm);
    var _op = {};
-   var reposition = F3(function (_p1,_p0,world) {
-      var _p2 = _p1;
-      var _p3 = _p0;
-      return A3($Graphics$Collage.collage,_p3._0,_p3._1,_U.list([A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: 0 - _p2._0,_1: 0 - _p2._1},world)]));
+   var reposition = F3(function (_p0,s,world) {
+      var _p1 = _p0;
+      return $Graphics$Collage.toForm(A3($Graphics$Collage.collage,
+      _p1._0,
+      _p1._1,
+      _U.list([A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: 0 - s.x,_1: 0 - s.y},world)])));
    });
-   var setUp = F2(function (_p4,s) {
-      var _p5 = _p4;
-      var stars = $Graphics$Collage.toForm(A3($Graphics$Element.image,500,500,A2($Basics._op["++"],$Root.root,"measure.png")));
+   var stars = $Graphics$Collage.toForm(A3($Graphics$Element.image,500,500,A2($Basics._op["++"],$Root.root,"stars.png")));
+   var setUp = F2(function (_p2,s) {
+      var _p3 = _p2;
+      var space = $Graphics$Collage.toForm(A3($Graphics$Collage.collage,
+      1000,
+      1000,
+      _U.list([A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: -250,_1: 250},stars)
+              ,A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: 250,_1: 250},stars)
+              ,A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: 250,_1: -250},stars)
+              ,A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: -250,_1: -250},stars)])));
       var lander = A2($Graphics$Collage.rotate,
       $Basics.degrees(s.a),
       A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: s.x,_1: s.y},$Graphics$Collage.toForm($DrawLander.drawLander(s))));
-      return $Graphics$Collage.toForm(A3($Graphics$Collage.collage,_p5._0,_p5._1,_U.list([stars,lander])));
+      return $Graphics$Collage.toForm(A3($Graphics$Collage.collage,_p3._0,_p3._1,_U.list([space])));
    });
-   var view = F2(function (_p6,s) {
-      var _p7 = _p6;
-      var _p9 = _p7._0;
-      var _p8 = _p7._1;
-      return A3(reposition,{ctor: "_Tuple2",_0: s.x,_1: s.y},{ctor: "_Tuple2",_0: _p9,_1: _p8},A2(setUp,{ctor: "_Tuple2",_0: _p9,_1: _p8},s));
+   var goodBlue = A3($Color.rgb,14,30,95);
+   var blinders = function (_p4) {
+      var _p5 = _p4;
+      var _p7 = _p5._0;
+      var _p6 = _p5._1;
+      var hBarWidth = $Basics.toFloat(_p7 - 501) / 2 + 1;
+      var vBarHeight = $Basics.toFloat(_p6 - 501) / 2 + 1;
+      var hBarHeight = $Basics.toFloat(_p6) - vBarHeight * 2 + 2;
+      return $Graphics$Collage.toForm(A3($Graphics$Collage.collage,
+      _p7,
+      _p6,
+      _U.list([A2($Graphics$Collage.move,
+              {ctor: "_Tuple2",_0: 0,_1: $Basics.toFloat(_p6) / 2 - vBarHeight / 2},
+              A2($Graphics$Collage.filled,goodBlue,A2($Graphics$Collage.rect,$Basics.toFloat(_p7),vBarHeight)))
+              ,A2($Graphics$Collage.move,
+              {ctor: "_Tuple2",_0: 0,_1: (0 - $Basics.toFloat(_p6)) / 2 + vBarHeight / 2},
+              A2($Graphics$Collage.filled,goodBlue,A2($Graphics$Collage.rect,$Basics.toFloat(_p7),vBarHeight)))
+              ,A2($Graphics$Collage.move,
+              {ctor: "_Tuple2",_0: (0 - ($Basics.toFloat(_p7) - 500)) / 2 - 15,_1: 0},
+              A2($Graphics$Collage.filled,goodBlue,A2($Graphics$Collage.rect,hBarWidth,hBarHeight)))
+              ,A2($Graphics$Collage.move,
+              {ctor: "_Tuple2",_0: ($Basics.toFloat(_p7) - 500) / 2 + 15,_1: 0},
+              A2($Graphics$Collage.filled,goodBlue,A2($Graphics$Collage.rect,hBarWidth,hBarHeight)))])));
+   };
+   var reorient = F3(function (_p8,s,world) {
+      var _p9 = _p8;
+      var _p11 = _p9._0;
+      var _p10 = _p9._1;
+      var lander = $Graphics$Collage.toForm($DrawLander.drawLander(s));
+      return A3($Graphics$Collage.collage,
+      _p11,
+      _p10,
+      _U.list([A2($Graphics$Collage.rotate,$Basics.degrees(0 - s.a),world)
+              ,$Graphics$Collage.toForm(A3($Graphics$Element.image,501,501,A2($Basics._op["++"],$Root.root,"scope.png")))
+              ,blinders({ctor: "_Tuple2",_0: _p11,_1: _p10})
+              ,lander]));
    });
-   return _elm.View.values = {_op: _op,setUp: setUp,reposition: reposition,view: view};
+   var view = F2(function (d,s) {
+      return A3(reorient,d,s,A3(reposition,{ctor: "_Tuple2",_0: 1000,_1: 1000},s,A2(setUp,{ctor: "_Tuple2",_0: 1000,_1: 1000},s)));
+   });
+   return _elm.View.values = {_op: _op,goodBlue: goodBlue,stars: stars,setUp: setUp,reposition: reposition,reorient: reorient,blinders: blinders,view: view};
 };
 Elm.Main = Elm.Main || {};
 Elm.Main.make = function (_elm) {
@@ -7518,11 +7562,18 @@ Elm.Main.make = function (_elm) {
    $Window = Elm.Window.make(_elm);
    var _op = {};
    var input = function () {
-      var delta = A2($Signal.map,function (t) {    return t / 40;},$Time.fps(30));
+      var delta = A2($Signal.map,function (t) {    return t / 120;},$Time.fps(30));
       return A2($Signal.sampleOn,delta,A3($Signal.map2,F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};}),delta,$Keyboard.keysDown));
    }();
    var physics = F2(function (dt,reasey) {
-      return _U.update(reasey,{y: reasey.y + dt * reasey.vy,x: reasey.x + dt * reasey.vx,a: reasey.a + dt * reasey.va});
+      var x$ = function () {    var x$$ = reasey.x + dt * reasey.vx;return _U.cmp(x$$,250) > 0 ? x$$ - 500 : _U.cmp(x$$,-250) < 0 ? x$$ + 500 : x$$;}();
+      var y$ = function () {    var y$$ = reasey.y + dt * reasey.vy;return _U.cmp(y$$,250) > 0 ? y$$ - 500 : _U.cmp(y$$,-250) < 0 ? y$$ + 500 : y$$;}();
+      return _U.update(reasey,{y: y$,x: x$,a: reasey.a + dt * reasey.va});
+   });
+   var floatModulo = F2(function (n,m) {
+      var n$ = $Basics.round(n);
+      var modulod = A2($Basics._op["%"],n$,m);
+      return A2(F2(function (x,y) {    return x - y;}),$Basics.toFloat(modulod),$Basics.toFloat(n$) - n);
    });
    var gravity = F2(function (dt,reasey) {    return _U.update(reasey,{vy: reasey.vy - dt / 50,vx: reasey.vx - dt / 94});});
    var thrust = function (reasey) {
@@ -7541,7 +7592,7 @@ Elm.Main.make = function (_elm) {
                   ,rightBack: A2(keyPressed,$KeyCodes.u,keys)}});
    });
    var update = F2(function (_p0,reasey) {    var _p1 = _p0;return A2(physics,_p1._0,thrust(A2(setThrusters,_p1._1,reasey)));});
-   var reasey = {x: 0,y: 0,a: 0,vx: 0,vy: 0,va: 0,thrusters: {leftFront: 0,leftSide: 0,leftBack: 0,main: 0,rightFront: 0,rightSide: 0,rightBack: 0}};
+   var reasey = {x: 0,y: 0,a: 15,vx: 0,vy: 0,va: -0.1,thrusters: {leftFront: 0,leftSide: 0,leftBack: 0,main: 0,rightFront: 0,rightSide: 0,rightBack: 0}};
    var main = A3($Signal.map2,$View.view,$Window.dimensions,A3($Signal.foldp,update,reasey,input));
    return _elm.Main.values = {_op: _op
                              ,reasey: reasey
@@ -7549,6 +7600,7 @@ Elm.Main.make = function (_elm) {
                              ,setThrusters: setThrusters
                              ,thrust: thrust
                              ,gravity: gravity
+                             ,floatModulo: floatModulo
                              ,physics: physics
                              ,update: update
                              ,main: main
