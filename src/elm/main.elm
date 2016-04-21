@@ -1,20 +1,19 @@
-import Color exposing (..)
+import Color            exposing (..)
 import Graphics.Collage exposing (..)
 import Graphics.Element exposing (..)
 import Keyboard
-import Time exposing (..)
+import Time             exposing (..)
 import Window
 import Set
-import Debug exposing (log)
-import List exposing (..)
+import List             exposing (..)
 import Random
-import Thrusters exposing (deltaY, deltaX, deltaAngular)
-import View exposing (view)
-import Types exposing (..)
+import Thrusters        exposing (deltaY, deltaX, deltaAngular)
+import View             exposing (view)
+import Types            exposing (..)
 import KeyCodes
 import Task
-import Effects exposing (..)
-import Set exposing (Set)
+import Effects          exposing (..)
+import Set              exposing (Set)
 
 -- The landers name is Reasey
 reasey : Ship
@@ -64,16 +63,16 @@ setThrusters keys s =
 
 thrust : Ship -> Ship
 thrust reasey =
-  { reasey |
-    vy = reasey.vy + 0.5 * (deltaY       reasey)
+  { reasey
+  | vy = reasey.vy + 0.5 * (deltaY       reasey)
   , vx = reasey.vx + 0.5 * (deltaX       reasey)
   , va = reasey.va + 0.5 * (deltaAngular reasey)
   }
 
 gravity : Float -> Ship -> Ship
 gravity dt reasey =
-  { reasey |
-    vy = reasey.vy - dt/50
+  { reasey
+  | vy = reasey.vy - dt/50
   , vx = reasey.vx - dt/94
   }
 
@@ -95,7 +94,6 @@ physics dt reasey =
   let 
     y' = 
       let 
-        --yeeee = log "speee" reasey.vy
         y'' = 
           reasey.y + dt * reasey.vy
       in    
@@ -122,8 +120,8 @@ physics dt reasey =
             x''
 
   in
-    { reasey |
-      y = y'
+    { reasey
+    | y = y'
     , x = x'
     , a = reasey.a + dt * reasey.va
     }
@@ -140,7 +138,8 @@ update (dt, keys) reasey =
 
 main : Signal Element
 main =
-  Signal.map2 view Window.dimensions (Signal.foldp update reasey input)
+  Signal.map2 view Window.dimensions
+  <|Signal.foldp update reasey input
 
 
 input : Signal (Float, Set Int)
@@ -148,6 +147,7 @@ input =
   let 
     delta = Signal.map (\t -> t/120) (fps 30)
   in
-    Signal.sampleOn delta (Signal.map2 (,) delta Keyboard.keysDown)
+    Signal.sampleOn delta 
+    <|Signal.map2 (,) delta Keyboard.keysDown
 
 

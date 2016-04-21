@@ -7339,48 +7339,36 @@ Elm.DrawLander.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm),
    $Types = Elm.Types.make(_elm);
    var _op = {};
+   var imager = F3(function (w,h,str) {    return $Graphics$Collage.toForm(A3($Graphics$Element.image,w,h,str));});
+   var src = function (str) {    return A2($Basics._op["++"],$Root.root,A2($Basics._op["++"],str,".png"));};
    var drawLander = function (s) {
-      var lander = _U.list([$Graphics$Collage.toForm(A3($Graphics$Element.image,47,48,A2($Basics._op["++"],$Root.root,"darkened-lander.png")))]);
+      var lander = _U.list([A3(imager,47,48,src("darkened-lander"))]);
+      var sides$ = function (i) {    return $Graphics$Collage.toForm(A3($Graphics$Element.image,8,3,i));};
+      var sides = function (i) {    return $Graphics$Collage.toForm(A3($Graphics$Element.image,2,9,i));};
       var t = s.thrusters;
       var mainThruster = _U.eq(t.main,1) ? _U.list([A2($Graphics$Collage.move,
       {ctor: "_Tuple2",_0: 0,_1: -32},
-      $Graphics$Collage.toForm(A3($Graphics$Element.image,12,33,A2($Basics._op["++"],$Root.root,"blast_main.png"))))]) : _U.list([]);
-      var leftFront = _U.eq(t.leftFront,1) ? _U.list([A2($Graphics$Collage.move,
-      {ctor: "_Tuple2",_0: -19,_1: 9},
-      $Graphics$Collage.toForm(A3($Graphics$Element.image,2,9,A2($Basics._op["++"],$Root.root,"blast_yaw.png"))))]) : _U.list([]);
+      A3(imager,12,33,src("blast_main")))]) : _U.list([]);
+      var leftFront = _U.eq(t.leftFront,1) ? _U.list([A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: -19,_1: 9},sides(src("blast_yaw")))]) : _U.list([]);
       var leftBack = _U.eq(t.leftBack,1) ? _U.list([A2($Graphics$Collage.move,
       {ctor: "_Tuple2",_0: -19,_1: -9},
-      A2($Graphics$Collage.scale,
-      -1,
-      $Graphics$Collage.toForm(A3($Graphics$Element.image,2,9,A2($Basics._op["++"],$Root.root,"blast_yaw_f.png")))))]) : _U.list([]);
+      A2($Graphics$Collage.scale,-1,sides(src("blast_yaw_f"))))]) : _U.list([]);
       var leftSide = _U.eq(t.leftSide,1) ? _U.list([A2($Graphics$Collage.move,
       {ctor: "_Tuple2",_0: 25,_1: -1},
-      A2($Graphics$Collage.rotate,
-      $Basics.degrees(180),
-      $Graphics$Collage.toForm(A3($Graphics$Element.image,8,3,A2($Basics._op["++"],$Root.root,"blast_strafe.png")))))]) : _U.list([]);
-      var rightSide = _U.eq(t.rightSide,1) ? _U.list([A2($Graphics$Collage.move,
-      {ctor: "_Tuple2",_0: -25,_1: -1},
-      A2($Graphics$Collage.rotate,
-      $Basics.degrees(0),
-      $Graphics$Collage.toForm(A3($Graphics$Element.image,8,3,A2($Basics._op["++"],$Root.root,"blast_strafe.png")))))]) : _U.list([]);
+      A2($Graphics$Collage.rotate,$Basics.degrees(180),sides$(src("blast_strafe"))))]) : _U.list([]);
+      var rightSide = _U.eq(t.rightSide,1) ? _U.list([A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: -25,_1: -1},sides(src("blast_strafe")))]) : _U.list([]);
       var rightFront = _U.eq(t.rightFront,1) ? _U.list([A2($Graphics$Collage.move,
       {ctor: "_Tuple2",_0: 19,_1: 9},
-      A2($Graphics$Collage.rotate,
-      $Basics.degrees(180),
-      A2($Graphics$Collage.scale,
-      -1,
-      $Graphics$Collage.toForm(A3($Graphics$Element.image,2,9,A2($Basics._op["++"],$Root.root,"blast_yaw_f.png"))))))]) : _U.list([]);
+      A2($Graphics$Collage.rotate,$Basics.degrees(180),A2($Graphics$Collage.scale,-1,sides(src("blast_yaw_f")))))]) : _U.list([]);
       var rightBack = _U.eq(t.rightBack,1) ? _U.list([A2($Graphics$Collage.move,
       {ctor: "_Tuple2",_0: 19,_1: -9},
-      A2($Graphics$Collage.rotate,
-      $Basics.degrees(180),
-      $Graphics$Collage.toForm(A3($Graphics$Element.image,2,9,A2($Basics._op["++"],$Root.root,"blast_yaw.png")))))]) : _U.list([]);
-      return A3($Graphics$Collage.collage,
+      A2($Graphics$Collage.rotate,$Basics.degrees(180),sides(src("blast_yaw"))))]) : _U.list([]);
+      return $Graphics$Collage.toForm(A3($Graphics$Collage.collage,
       138,
       138,
-      A3($List.foldr,$List.append,_U.list([]),_U.list([rightSide,leftSide,rightBack,leftBack,rightFront,leftFront,mainThruster,lander])));
+      A3($List.foldr,$List.append,_U.list([]),_U.list([rightSide,leftSide,rightBack,leftBack,rightFront,leftFront,mainThruster,lander]))));
    };
-   return _elm.DrawLander.values = {_op: _op,drawLander: drawLander};
+   return _elm.DrawLander.values = {_op: _op,src: src,imager: imager,drawLander: drawLander};
 };
 Elm.KeyCodes = Elm.KeyCodes || {};
 Elm.KeyCodes.make = function (_elm) {
@@ -7475,69 +7463,58 @@ Elm.View.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm),
    $Types = Elm.Types.make(_elm);
    var _op = {};
-   var reposition = F3(function (_p0,s,world) {
+   var bar = F3(function (w,h,cor) {
+      return A2($Graphics$Collage.move,cor,A2($Graphics$Collage.filled,A3($Color.rgb,14,30,95),A2($Graphics$Collage.rect,w,h)));
+   });
+   var blinders = function (_p0) {
       var _p1 = _p0;
+      var _p3 = _p1._0;
+      var _p2 = _p1._1;
+      var h$ = $Basics.toFloat(_p2) / 2;
+      var w$ = $Basics.toFloat(_p3);
+      var hBarWidth = $Basics.toFloat(_p3 - 501) / 2 + 1;
+      var vBarHeight = $Basics.toFloat(_p2 - 501) / 2 + 1;
+      var hBarHeight = $Basics.toFloat(_p2) - vBarHeight * 2 + 2;
       return $Graphics$Collage.toForm(A3($Graphics$Collage.collage,
-      _p1._0,
-      _p1._1,
+      _p3,
+      _p2,
+      _U.list([A3(bar,w$,vBarHeight,{ctor: "_Tuple2",_0: 0,_1: h$ - vBarHeight / 2})
+              ,A3(bar,w$,vBarHeight,{ctor: "_Tuple2",_0: 0,_1: 0 - h$ + vBarHeight / 2})
+              ,A3(bar,hBarWidth,hBarHeight,{ctor: "_Tuple2",_0: (0 - (w$ - 500)) / 2 - 15,_1: 0})
+              ,A3(bar,hBarWidth,hBarHeight,{ctor: "_Tuple2",_0: (w$ - 500) / 2 + 15,_1: 0})])));
+   };
+   var reorient = F3(function (_p4,s,world) {
+      var _p5 = _p4;
+      var _p7 = _p5._0;
+      var _p6 = _p5._1;
+      return A3($Graphics$Collage.collage,
+      _p7,
+      _p6,
+      _U.list([A2($Graphics$Collage.rotate,$Basics.degrees(0 - s.a),world)
+              ,$Graphics$Collage.toForm(A3($Graphics$Element.image,501,501,A2($Basics._op["++"],$Root.root,"scope.png")))
+              ,blinders({ctor: "_Tuple2",_0: _p7,_1: _p6})
+              ,$DrawLander.drawLander(s)]));
+   });
+   var reposition = F3(function (_p8,s,world) {
+      var _p9 = _p8;
+      return $Graphics$Collage.toForm(A3($Graphics$Collage.collage,
+      _p9._0,
+      _p9._1,
       _U.list([A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: 0 - s.x,_1: 0 - s.y},world)])));
    });
    var stars = $Graphics$Collage.toForm(A3($Graphics$Element.image,500,500,A2($Basics._op["++"],$Root.root,"stars.png")));
-   var setUp = F2(function (_p2,s) {
-      var _p3 = _p2;
-      var space = $Graphics$Collage.toForm(A3($Graphics$Collage.collage,
-      1000,
-      1000,
+   var setUp = function (_p10) {
+      var _p11 = _p10;
+      return $Graphics$Collage.toForm(A3($Graphics$Collage.collage,
+      _p11._0,
+      _p11._1,
       _U.list([A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: -250,_1: 250},stars)
               ,A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: 250,_1: 250},stars)
               ,A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: 250,_1: -250},stars)
               ,A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: -250,_1: -250},stars)])));
-      var lander = A2($Graphics$Collage.rotate,
-      $Basics.degrees(s.a),
-      A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: s.x,_1: s.y},$Graphics$Collage.toForm($DrawLander.drawLander(s))));
-      return $Graphics$Collage.toForm(A3($Graphics$Collage.collage,_p3._0,_p3._1,_U.list([space])));
-   });
-   var goodBlue = A3($Color.rgb,14,30,95);
-   var blinders = function (_p4) {
-      var _p5 = _p4;
-      var _p7 = _p5._0;
-      var _p6 = _p5._1;
-      var hBarWidth = $Basics.toFloat(_p7 - 501) / 2 + 1;
-      var vBarHeight = $Basics.toFloat(_p6 - 501) / 2 + 1;
-      var hBarHeight = $Basics.toFloat(_p6) - vBarHeight * 2 + 2;
-      return $Graphics$Collage.toForm(A3($Graphics$Collage.collage,
-      _p7,
-      _p6,
-      _U.list([A2($Graphics$Collage.move,
-              {ctor: "_Tuple2",_0: 0,_1: $Basics.toFloat(_p6) / 2 - vBarHeight / 2},
-              A2($Graphics$Collage.filled,goodBlue,A2($Graphics$Collage.rect,$Basics.toFloat(_p7),vBarHeight)))
-              ,A2($Graphics$Collage.move,
-              {ctor: "_Tuple2",_0: 0,_1: (0 - $Basics.toFloat(_p6)) / 2 + vBarHeight / 2},
-              A2($Graphics$Collage.filled,goodBlue,A2($Graphics$Collage.rect,$Basics.toFloat(_p7),vBarHeight)))
-              ,A2($Graphics$Collage.move,
-              {ctor: "_Tuple2",_0: (0 - ($Basics.toFloat(_p7) - 500)) / 2 - 15,_1: 0},
-              A2($Graphics$Collage.filled,goodBlue,A2($Graphics$Collage.rect,hBarWidth,hBarHeight)))
-              ,A2($Graphics$Collage.move,
-              {ctor: "_Tuple2",_0: ($Basics.toFloat(_p7) - 500) / 2 + 15,_1: 0},
-              A2($Graphics$Collage.filled,goodBlue,A2($Graphics$Collage.rect,hBarWidth,hBarHeight)))])));
    };
-   var reorient = F3(function (_p8,s,world) {
-      var _p9 = _p8;
-      var _p11 = _p9._0;
-      var _p10 = _p9._1;
-      var lander = $Graphics$Collage.toForm($DrawLander.drawLander(s));
-      return A3($Graphics$Collage.collage,
-      _p11,
-      _p10,
-      _U.list([A2($Graphics$Collage.rotate,$Basics.degrees(0 - s.a),world)
-              ,$Graphics$Collage.toForm(A3($Graphics$Element.image,501,501,A2($Basics._op["++"],$Root.root,"scope.png")))
-              ,blinders({ctor: "_Tuple2",_0: _p11,_1: _p10})
-              ,lander]));
-   });
-   var view = F2(function (d,s) {
-      return A3(reorient,d,s,A3(reposition,{ctor: "_Tuple2",_0: 1000,_1: 1000},s,A2(setUp,{ctor: "_Tuple2",_0: 1000,_1: 1000},s)));
-   });
-   return _elm.View.values = {_op: _op,goodBlue: goodBlue,stars: stars,setUp: setUp,reposition: reposition,reorient: reorient,blinders: blinders,view: view};
+   var view = F2(function (d,s) {    return A3(reorient,d,s,A3(reposition,{ctor: "_Tuple2",_0: 1000,_1: 1000},s,setUp({ctor: "_Tuple2",_0: 1000,_1: 1000})));});
+   return _elm.View.values = {_op: _op,stars: stars,setUp: setUp,reposition: reposition,reorient: reorient,bar: bar,blinders: blinders,view: view};
 };
 Elm.Main = Elm.Main || {};
 Elm.Main.make = function (_elm) {

@@ -1,0 +1,1 @@
+This is a simple space ship game. You can play it here : chadtech.us/elm-prac-7.html (controls are e, s, c, u, k, n, and space).
